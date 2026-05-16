@@ -1,3 +1,3 @@
 <?php
-echo "<h1>hello docker compose php v2<h1>"
+echo "<h1>hello docker compose php v2-----<h1>"
 ?>

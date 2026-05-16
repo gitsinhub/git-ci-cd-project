@@ -1,0 +1,51 @@
+version: "3.8"
+
+name: git-ci-cd-project
+
+services:
+  web:
+    #image: php:8.2-apache
+    build: .
+      #context: .
+      #dockerfile: Dockerfile
+    restart: always
+    container_name: web-server
+    ports: 
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+    networks:
+      - ci-cd-net
+    
+  db:
+    image: mysql:8.0
+    container_name: db-server
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PW}
+      MYSQL_DATABASE: ${my_site}
+      #MYSQL_USER: my_user
+      #MYSQL_PASSWORD: 1234
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./myaql-data:/var/lib/mysql
+    networks:
+      - ci-cd-net
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin-server
+    restart: always
+    ports:
+      - "8000:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+    networks:
+      - ci-cd-net
+
+networks:
+  ci-cd-net:
+    driver: bridge
+
